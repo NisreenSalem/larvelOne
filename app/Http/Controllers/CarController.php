@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use App\Models\Cars;
+use Illuminate\Support\Facades\Redirect;
 
 class CarController extends Controller
 {
@@ -12,7 +14,8 @@ class CarController extends Controller
      */
     public function index()
     {
-        //
+        $cars = Cars::get();
+        return view('cars', compact('cars'));
     }
 
     /**
@@ -56,6 +59,8 @@ class CarController extends Controller
      */
     public function edit(string $id)
     {
+        $car = Cars::findOrFail($id);
+        return view('updatecar', compact('car'));
         //
     }
 

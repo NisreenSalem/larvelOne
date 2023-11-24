@@ -43,13 +43,20 @@ Route::get('/thank-you', [FormController::class, 'thankYou'])->name('thank.you')
 
 
 // Route::get('addcar', [CarController::class, 'store']);
-
-
 // Route::post('storeCar', [CarController::class, 'store'])->name('storeCar');
-
 // Route::get('addcar', [CarController::class, 'create']);
 
 
-Route::post('storeNews', [NewsController::class, 'store'])->name('storeNews');
 
+
+Route::get('cars', [CarController::class, 'index']);
+Route::get('editCar/{id}', [CarController::class, 'edit']);
+Route::put('updateCar/{id}', [CarController::class, 'update'])->name('UpdateCar');
+
+// Update the news
 Route::get('addnews', [NewsController::class, 'create']);
+Route::post('storeNews', [NewsController::class, 'store'])->name('storeNews');
+// Showing the news and showing news data in updated/edit form
+Route::get('news', [NewsController::class, 'index']);
+Route::get('editNews/{id}', [NewsController::class, 'edit']);
+Route::put('updateNews/{id}', [NewsController::class, 'update'])->name('updateNews');
