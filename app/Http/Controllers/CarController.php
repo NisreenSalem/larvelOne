@@ -10,8 +10,12 @@ use Illuminate\Support\Facades\Redirect;
 class CarController extends Controller
 {
     /**
+     *
      * Display a listing of the resource.
      */
+
+    private $columns = ['carTitle', 'price', 'description', 'published'];
+
     public function index()
     {
         $cars = Cars::get();
@@ -51,7 +55,8 @@ class CarController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $car = Cars::findOrFail($id);
+        return view('carDetails', compact('car'));
     }
 
     /**
@@ -69,14 +74,22 @@ class CarController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        // Cars::where('id', $id)->update($request->only($this->columns));
+        $data = $request->only($this->columns);
+        $data['published'] = isset($data['published']) ? true : false;
+        Cars::where('id', $id)->update($data);
+        // return redirect('clients');
+        return "UPDATED";
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request,  string $id): RedirectResponse
     {
-        //
+
+        Cars::where('id', $id)->delete();
+        return redirect('cars');
+        // return "Deleted Page";
     }
 }

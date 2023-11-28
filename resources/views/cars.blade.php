@@ -20,9 +20,12 @@
             <thead>
                 <tr>
                     <th>Title</th>
-                    <th>Content</th>
+                    <th>Description</th>
+                    <th>Price</th>
                     <th>Published</th>
                     <th>Edit</th>
+                    <th> Details</th>
+                    <th>Removing</th>
                 </tr>
             </thead>
             <tbody>
@@ -30,8 +33,11 @@
                 <tr>
                     <td>{{$car->carTitle}}</td>
                     <td>{{$car->description}}</td>
+                    <td>{{$car->price}}</td>
                     <td>{{$car->published ? "true " :"false" }}</td>
                     <td><a href="editCar/{{ $car->id }}">Edit</a></td>
+                    <td><a href="carDetails/{{ $car->id }}">Show</a></td>
+                    <td><a href="deleteCar/{{ $car->id }}">delete</a></td>
                 </tr>
                 @endforeach
             </tbody>

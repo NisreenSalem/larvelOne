@@ -24,6 +24,8 @@
                     <th>Author</th>
                     <th>Published</th>
                     <th>Edit</th>
+                    <th>Details</th>
+                    <th>Removing</th>
                 </tr>
             </thead>
             <tbody>
@@ -34,6 +36,8 @@
                     <td>{{$new->author}}</td>
                     <td>{{$new->published ? "true " :"false" }}</td>
                     <td><a href="editNews/{{ $new->id }}">Edit</a></td>
+                    <td><a href="newsDetails/{{ $new->id }}">Show</a></td>
+                    <td><a href="deleteNews/{{ $new->id }}">delete</a></td>
                 </tr>
                 @endforeach
             </tbody>
