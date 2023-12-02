@@ -42,19 +42,22 @@ Route::get('/thank-you', [FormController::class, 'thankYou'])->name('thank.you')
 // Route::post('recieve', [ExampleController::class, 'recieve'])->name('recieve');
 
 
-// Route::get('addcar', [CarController::class, 'store']);
-// Route::post('storeCar', [CarController::class, 'store'])->name('storeCar');
-// Route::get('addcar', [CarController::class, 'create']);
-
-
-
+Route::get('addcar', [CarController::class, 'store']);
+Route::post('storeCar', [CarController::class, 'store'])->name('storeCar');
+Route::get('addcar', [CarController::class, 'create']);
+Route::get('carTrashed', [CarController::class, 'trashed']);
 
 Route::get('cars', [CarController::class, 'index']);
+
 Route::get('editCar/{id}', [CarController::class, 'edit']);
 Route::get('carDetails/{id}', [CarController::class, 'show'])->name('carDetails');
-Route::get('deleteCar/{id}', [CarController::class, 'destroy'])->name('deleteCar');
-
+Route::get('deleteCar/{id}', [CarController::class, 'delete'])->name('deleteCar');
+Route::get('restoreCar/{id}', [CarController::class, 'destroy'])->name('restoreCar');
 Route::put('updateCar/{id}', [CarController::class, 'update'])->name('UpdateCar');
+
+
+
+
 
 // Update the news
 Route::get('addnews', [NewsController::class, 'create']);
@@ -63,7 +66,13 @@ Route::post('storeNews', [NewsController::class, 'store'])->name('storeNews');
 Route::get('news', [NewsController::class, 'index']);
 Route::get('editNews/{id}', [NewsController::class, 'edit']);
 Route::get('newsDetails/{id}', [NewsController::class, 'show'])->name('newsDetails');
-Route::get('deleteNews/{id}', [NewsController::class, 'destroy'])->name('deleteNews');
+
+// Delete
+Route::get('newsTrashed', [NewsController::class, 'trashed']);
+Route::get('deleteNews/{id}', [NewsController::class, 'delete'])->name('deleteNews');
+Route::get('destroyNews/{id}', [NewsController::class, 'destroy'])->name('destroyNews');
+Route::get('restoreNews/{id}', [NewsController::class, 'restore'])->name('restoreNews');
+
 
 
 Route::put('updateNews/{id}', [NewsController::class, 'update'])->name('updateNews');

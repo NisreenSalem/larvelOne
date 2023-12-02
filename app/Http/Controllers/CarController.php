@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use App\Models\Cars;
-use Illuminate\Support\Facades\Redirect;
+
 
 class CarController extends Controller
 {
@@ -36,18 +36,27 @@ class CarController extends Controller
     public function store(Request $request)
     {
         //
-        $car = new Cars;
-        $car->carTitle = $request->title;
-        $car->description =  $request->description;
+        // $car = new Cars;
+        // $car->carTitle = $request->carTitle;
+        // $car->price =  $request->price;
+        // $car->description =  $request->description;
+        // if (isset($request->published)) {
+        //     $car->published = true;
+        // } else {
+        //     $car->published = false;
+        // }
+        // $car->save();
+        $request->validate([
+            'carTitle' => 'required|string|max:50',
+            'description' => 'required|string',
+            'price' => 'required',
+        ]);
 
-        if (isset($request->published)) {
-            $car->published = true;
-        } else {
-            $car->published = false;
-        }
+        $data = $request->only($this->columns);
+        $data['published'] = isset($data['published']) ? true : false;
 
-        $car->save();
-        return "Car data added sucessfully";
+        Cars::create($data);
+        return 'done';
     }
 
     /**
@@ -85,11 +94,25 @@ class CarController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request,  string $id): RedirectResponse
+    public function destroy(string $id): RedirectResponse
     {
-
+        Cars::where('id', $id)->forceDelete();
+        return redirect('cars');
+    }
+    public function delete(string $id): RedirectResponse
+    {
         Cars::where('id', $id)->delete();
         return redirect('cars');
-        // return "Deleted Page";
+    }
+
+    public  function trashed()
+    {
+        $cars = Cars::onlyTrashed()->get();
+        return view('carTrashed', compact('cars'));
+    }
+    public  function restore(string $id): RedirectResponse
+    {
+        Cars::where('id', $id)->restore();
+        return redirect('cars');
     }
 }
