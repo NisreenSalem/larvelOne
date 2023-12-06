@@ -49,18 +49,24 @@ class NewsController extends Controller
 
         // $new->save();
         // return "new data added sucessfully";
-
+        $messages = [
+            'title.required' => 'Title is required ',
+            'contnet.required' => 'Should be required ',
+            'author.required' => 'required',
+        ];
         $request->validate([
             'title' => 'required|string|max:50',
             'content' => 'required|string|max:150',
             'author' => 'required|string',
-        ]);
+        ], $messages);
 
         $data = $request->only($this->columns);
-        $data['published'] = isset($data['published']) ? true : false;
+        $data['published'] = isset($data['published']);
 
-        News::create($data);
-        return 'done';
+
+        return  dd($data);
+        // News::create($data);
+        // return 'done';
     }
 
     /**

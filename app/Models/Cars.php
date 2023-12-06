@@ -13,6 +13,7 @@ class Cars extends Model
         'carTitle',
         'price',
         'description',
+        'image',
         'published'
 
 

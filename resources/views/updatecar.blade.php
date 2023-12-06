@@ -31,6 +31,19 @@
                 {{$car->description}}
                 </textarea>
             </div>
+            <div class="form-group">
+
+                <label class="control-label col-sm-2" for="image">Image:</label>
+                {{$car->image}}
+
+                <input type="file" class="form-control" id="image" name="image" value="{{$car->image}}">
+                @if($car->image)
+
+                <img src="public/assets/images/{{$car->image}}" style="height: 150px;width:200px;">
+                @else
+                <span>No image found!</span>
+                @endif
+            </div>
             <div class="checkbox">
                 <label><input type="checkbox" name="published" @checked($car->published) > Published</label>
             </div>

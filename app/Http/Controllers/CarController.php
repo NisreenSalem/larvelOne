@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use App\Models\Cars;
-
+use App\Traits\Common;
+use Illuminate\Support\Facades\Storage;
 
 class CarController extends Controller
 {
@@ -13,7 +14,7 @@ class CarController extends Controller
      *
      * Display a listing of the resource.
      */
-
+    use Common;
     private $columns = ['carTitle', 'price', 'description', 'published'];
 
     public function index()
@@ -46,15 +47,33 @@ class CarController extends Controller
         //     $car->published = false;
         // }
         // $car->save();
+
+        $meaasges = [
+            'carTitle.required' => 'Title is required ',
+            'description.required' => 'Should be requires ',
+            'image.required' => 'required',
+            'price.required' => 'required',
+        ];
         $request->validate([
             'carTitle' => 'required|string|max:50',
             'description' => 'required|string',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'price' => 'required',
-        ]);
+        ], $meaasges);
+
+        $fileName = time() . '.' . $request->image->extension();
+        $request->image->storeAs('assets/images', $fileName);
+
 
         $data = $request->only($this->columns);
-        $data['published'] = isset($data['published']) ? true : false;
-
+        $data['published'] = isset($data['published']);
+        $data['image'] = $fileName;
+        // $file = $request
+        //     ->image;
+        // $path = 'assets/images';
+        // $fileName = $this->uploadFile($file, $path);
+        // $data['image'] = $fileName;
+        // return dd($data);
         Cars::create($data);
         return 'done';
     }
@@ -84,10 +103,35 @@ class CarController extends Controller
     public function update(Request $request, string $id)
     {
         // Cars::where('id', $id)->update($request->only($this->columns));
+
         $data = $request->only($this->columns);
+
         $data['published'] = isset($data['published']) ? true : false;
+        // echo $data['image'];
+        // $fileName = '';
+
+        // if (isset($data['image'])) {
+        //     $fileName = time() . '.' . $data['image']->extension();
+        //     $data['image']->storeAs('images/assets/', $fileName);
+        // } else {
+        //     $fileName = '';
+        // }
+
+
+        // $input = $request->all();
+
+        if ($image = $request->file('image')) {
+            $destinationPath = 'assets/images/';
+            $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
+            $image->move($destinationPath, $profileImage);
+            $data['image'] = "$profileImage";
+        } else {
+            unset($data['image']);
+        }
+
+
+
         Cars::where('id', $id)->update($data);
-        // return redirect('clients');
         return "UPDATED";
     }
 

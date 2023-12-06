@@ -73,6 +73,8 @@ Route::get('deleteNews/{id}', [NewsController::class, 'delete'])->name('deleteNe
 Route::get('destroyNews/{id}', [NewsController::class, 'destroy'])->name('destroyNews');
 Route::get('restoreNews/{id}', [NewsController::class, 'restore'])->name('restoreNews');
 
-
-
 Route::put('updateNews/{id}', [NewsController::class, 'update'])->name('updateNews');
+
+// UPLOADING FILES
+Route::get('showUpload', [ExampleController::class, 'showUpload']);
+Route::post('upload', [ExampleController::class, 'upload'])->name('upload');
