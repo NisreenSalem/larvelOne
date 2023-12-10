@@ -35,20 +35,7 @@ class NewsController extends Controller
      */
     public function store(Request $request)
     {
-        // $new = new News;
-        // $new->title = $request->title;
-        // $new->content =  $request->content;
 
-
-        // if (isset($request->published)) {
-        //     $new->published = true;
-        // } else {
-        //     $new->published = false;
-        // }
-        // $new->author =  $request->author;
-
-        // $new->save();
-        // return "new data added sucessfully";
         $messages = [
             'title.required' => 'Title is required ',
             'contnet.required' => 'Should be required ',

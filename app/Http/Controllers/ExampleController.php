@@ -17,6 +17,19 @@ class ExampleController extends Controller
     {
         return view('login');
     }
+
+    public function blog()
+    {
+        return view('blog');
+    }
+
+    public function blogOne()
+    {
+        return view('blogOne');
+    }
+
+
+
     public function recieve(Request $req)
     {
         return $req;

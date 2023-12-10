@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ExampleController;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\CarController;
+use App\Http\Controllers\ExploreController;
 use App\Http\Controllers\NewsController;
 
 /*
@@ -23,12 +24,12 @@ Route::get('/', function () {
 // Route::get('/temp', function () {
 //     return view('temp');
 // });
-Route::get('/login', function () {
-    return view('login');
-});
-Route::post('recieve', function () {
-    return 'Data Recived';
-})->name('recieve');
+// Route::get('/login', function () {
+//     return view('login');
+// });
+// Route::post('recieve', function () {
+//     return 'Data Recived';
+// })->name('recieve');
 
 
 
@@ -38,7 +39,9 @@ Route::post('/form', [FormController::class, 'submitForm'])->name('submit.form')
 Route::get('/thank-you', [FormController::class, 'thankYou'])->name('thank.you');
 
 
-// Route::get('login', [ExampleController::class, 'login']);
+Route::get('login', [ExampleController::class, 'login']);
+Route::get('blog', [ExampleController::class, 'blog']);
+Route::get('blogOne', [ExampleController::class, 'blogOne']);
 // Route::post('recieve', [ExampleController::class, 'recieve'])->name('recieve');
 
 
@@ -78,3 +81,9 @@ Route::put('updateNews/{id}', [NewsController::class, 'update'])->name('updateNe
 // UPLOADING FILES
 Route::get('showUpload', [ExampleController::class, 'showUpload']);
 Route::post('upload', [ExampleController::class, 'upload'])->name('upload');
+
+
+
+// Add the explore
+Route::get('addExplore', [ExploreController::class, 'create']);
+Route::post('storeExplore', [ExploreController::class, 'store'])->name('storeExplore');

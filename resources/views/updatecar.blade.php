@@ -14,7 +14,7 @@
 
     <div class="container">
         <h2>Edit Car</h2>
-        <form action="{{route('UpdateCar',$car->id)}}" method="post">
+        <form action="{{route('UpdateCar',$car->id)}}" method="post" enctype="multipart/form-data">
             @csrf
             @method('put')
             <div class="form-group">
@@ -34,12 +34,12 @@
             <div class="form-group">
 
                 <label class="control-label col-sm-2" for="image">Image:</label>
-                {{$car->image}}
+                <!-- {{$car->image}} -->
 
                 <input type="file" class="form-control" id="image" name="image" value="{{$car->image}}">
                 @if($car->image)
 
-                <img src="public/assets/images/{{$car->image}}" style="height: 150px;width:200px;">
+                <img src="{{asset('assets/images/'.$car->image)}}" style="height: 150px;width:200px;">
                 @else
                 <span>No image found!</span>
                 @endif

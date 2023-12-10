@@ -31,52 +31,7 @@ class CarController extends Controller
         return view('addcar');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-        // $car = new Cars;
-        // $car->carTitle = $request->carTitle;
-        // $car->price =  $request->price;
-        // $car->description =  $request->description;
-        // if (isset($request->published)) {
-        //     $car->published = true;
-        // } else {
-        //     $car->published = false;
-        // }
-        // $car->save();
 
-        $meaasges = [
-            'carTitle.required' => 'Title is required ',
-            'description.required' => 'Should be requires ',
-            'image.required' => 'required',
-            'price.required' => 'required',
-        ];
-        $request->validate([
-            'carTitle' => 'required|string|max:50',
-            'description' => 'required|string',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'price' => 'required',
-        ], $meaasges);
-
-        $fileName = time() . '.' . $request->image->extension();
-        $request->image->storeAs('assets/images', $fileName);
-
-
-        $data = $request->only($this->columns);
-        $data['published'] = isset($data['published']);
-        $data['image'] = $fileName;
-        // $file = $request
-        //     ->image;
-        // $path = 'assets/images';
-        // $fileName = $this->uploadFile($file, $path);
-        // $data['image'] = $fileName;
-        // return dd($data);
-        Cars::create($data);
-        return 'done';
-    }
 
     /**
      * Display the specified resource.
@@ -100,39 +55,72 @@ class CarController extends Controller
     /**
      * Update the specified resource in storage.
      */
+
+
+    public function store(Request $request)
+    {
+
+
+        $meaasges = $this->messages();
+        $request->validate([
+            'carTitle' => 'required|string|max:50',
+            'description' => 'required|string',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'price' => 'required',
+        ], $meaasges);
+
+        $data = $request->only($this->columns);
+        $data['published'] = isset($data['published']) ? true : false;
+        $fileName = time() . '.' . $request->image->extension();
+        $request->image->storeAs('assets/images', $fileName);
+
+
+        $data = $request->only($this->columns);
+        $data['published'] = isset($data['published']);
+        $data['image'] = $fileName;
+
+        Cars::create($data);
+        return 'done';
+    }
+
     public function update(Request $request, string $id)
     {
         // Cars::where('id', $id)->update($request->only($this->columns));
 
         $data = $request->only($this->columns);
 
+
+        $meaasges = $this->messages();
+        $request->validate([
+            'carTitle' => 'required|string|max:50',
+            'description' => 'required|string',
+            'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'price' => 'required',
+        ], $meaasges);
         $data['published'] = isset($data['published']) ? true : false;
-        // echo $data['image'];
-        // $fileName = '';
-
-        // if (isset($data['image'])) {
-        //     $fileName = time() . '.' . $data['image']->extension();
-        //     $data['image']->storeAs('images/assets/', $fileName);
-        // } else {
-        //     $fileName = '';
-        // }
 
 
-        // $input = $request->all();
-
-        if ($image = $request->file('image')) {
-            $destinationPath = 'assets/images/';
-            $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
-            $image->move($destinationPath, $profileImage);
-            $data['image'] = "$profileImage";
-        } else {
-            unset($data['image']);
+        // update image if new file selected
+        if ($request->hasFile('image')) {
+            $fileName = $this->uploadFile($request->image, 'assets/images');
+            $data['image'] = $fileName;
         }
 
 
-
+        // return dd($data);
+        // Cars::where('id', $id)->update($request->only($this->columns));
         Cars::where('id', $id)->update($data);
-        return "UPDATED";
+        return 'Updated';
+    }
+
+    public function messages()
+    {
+        return [
+            'carTitle.required' => 'Title is required ',
+            'description.required' => 'Should be requires ',
+            'image.required' => 'required',
+            'price.required' => 'required',
+        ];
     }
 
     /**
