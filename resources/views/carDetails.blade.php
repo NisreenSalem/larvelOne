@@ -19,6 +19,8 @@
     <h2>Car description : {{$car->description}}</h2>
     <br>
     <h2>Car published : {{$car->published}}</h2>
+    <br>
+    <h2>Car categoryName : {{$car->category->categoryName}}</h2>
 
 </body>
 

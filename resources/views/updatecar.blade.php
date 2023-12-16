@@ -38,15 +38,27 @@
 
                 <input type="file" class="form-control" id="image" name="image" value="{{$car->image}}">
                 @if($car->image)
-
-                <img src="{{asset('assets/images/'.$car->image)}}" style="height: 150px;width:200px;">
+                <!-- <h3>{{$car->image }}</h3> -->
+                <img src="{{asset('assets/images/' . $car->image)}}" alt="Car Image" style="height: 3000px;width:400px;">
                 @else
                 <span>No image found!</span>
                 @endif
             </div>
+            <div class="form-group">
+
+                <select name="category_id" required>
+                    <option value="">Select Category</option>
+                    @foreach($categories as $category)
+                    <option value="{{ $category->id }}">{{ $category->categoryName }}</option>
+                    @endforeach
+                </select>
+
+            </div>
             <div class="checkbox">
                 <label><input type="checkbox" name="published" @checked($car->published) > Published</label>
             </div>
+
+
             <button type="submit" class="btn btn-default">Add</button>
         </form>
     </div>

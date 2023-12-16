@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use App\Models\Cars;
+use App\Models\Category;
 use App\Traits\Common;
 use Illuminate\Support\Facades\Storage;
 
@@ -15,7 +16,7 @@ class CarController extends Controller
      * Display a listing of the resource.
      */
     use Common;
-    private $columns = ['carTitle', 'price', 'description', 'published'];
+    private $columns = ['carTitle', 'price', 'description', 'category_id', 'published'];
 
     public function index()
     {
@@ -28,7 +29,8 @@ class CarController extends Controller
      */
     public function create()
     {
-        return view('addcar');
+        $categories = Category::select('id', 'categoryName')->get();
+        return view('addcar', compact('categories'));
     }
 
 
@@ -39,6 +41,7 @@ class CarController extends Controller
     public function show(string $id)
     {
         $car = Cars::findOrFail($id);
+
         return view('carDetails', compact('car'));
     }
 
@@ -48,8 +51,8 @@ class CarController extends Controller
     public function edit(string $id)
     {
         $car = Cars::findOrFail($id);
-        return view('updatecar', compact('car'));
-        //
+        $categories = Category::select('id', 'categoryName')->get();
+        return view('updatecar', compact('car', 'categories'));
     }
 
     /**
@@ -67,10 +70,11 @@ class CarController extends Controller
             'description' => 'required|string',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'price' => 'required',
+            'published' => 'required',
+
         ], $meaasges);
 
         $data = $request->only($this->columns);
-        $data['published'] = isset($data['published']) ? true : false;
         $fileName = time() . '.' . $request->image->extension();
         $request->image->storeAs('assets/images', $fileName);
 
@@ -78,6 +82,8 @@ class CarController extends Controller
         $data = $request->only($this->columns);
         $data['published'] = isset($data['published']);
         $data['image'] = $fileName;
+        $data['category_id'] = $request->input('category_id');
+
 
         Cars::create($data);
         return 'done';
@@ -96,8 +102,11 @@ class CarController extends Controller
             'description' => 'required|string',
             'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'price' => 'required',
+            'published' => 'required',
+
         ], $meaasges);
         $data['published'] = isset($data['published']) ? true : false;
+        $categories = Category::select('id', 'categoryName')->get();
 
 
         // update image if new file selected
@@ -105,6 +114,8 @@ class CarController extends Controller
             $fileName = $this->uploadFile($request->image, 'assets/images');
             $data['image'] = $fileName;
         }
+        $data['category_id'] = $request->input('category_id');
+
 
 
         // return dd($data);
@@ -120,6 +131,8 @@ class CarController extends Controller
             'description.required' => 'Should be requires ',
             'image.required' => 'required',
             'price.required' => 'required',
+            'published' => 'required',
+
         ];
     }
 
